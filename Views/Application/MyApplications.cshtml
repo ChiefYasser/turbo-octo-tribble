@@ -1,0 +1,55 @@
+﻿@model IEnumerable<HRRecruitmentSystem.Models.Application>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<div class="container mt-4">
+    <h2>My Job Applications</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You haven't applied to any jobs yet.
+            <a asp-controller="JobOffer" asp-action="Index" class="alert-link">Browse Jobs</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var app in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between">
+                            <h5 class="mb-0">@app.JobOffer.Title</h5>
+                            <small>@app.AppliedAt.ToShortDateString()</small>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Location:</strong> @app.JobOffer.Location</p>
+                            <p class="card-text">
+                                <strong>Status: </strong>
+                                @if (app.Status == HRRecruitmentSystem.Models.ApplicationStatus.Accepted)
+                                {
+                                    <span class="badge bg-success" style="font-size: 1rem;">🎉 Accepted</span>
+                                }
+                                else if (app.Status == HRRecruitmentSystem.Models.ApplicationStatus.Rejected)
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">⏳ Pending Review</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a asp-controller="JobOffer" asp-action="Details" asp-route-id="@app.JobOfferId" class="btn btn-sm btn-outline-secondary">View Job Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

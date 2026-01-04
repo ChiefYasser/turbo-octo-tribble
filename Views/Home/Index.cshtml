@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    
+    <div class="container-fluid pt-3">
+
+      
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-bold" style="color: var(--brand-black);">Hello, @User.Identity.Name! 👋</h1>
+                <p class="text-muted">Here is your recruitment overview.</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <span class="badge p-2" style="background-color: var(--brand-pink); color: var(--brand-dark-red);">
+                    <i class="fa-solid fa-calendar"></i> @DateTime.Now.ToShortDateString()
+                </span>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="border-left: 5px solid var(--brand-red) !important;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted small fw-bold">Active Jobs</h6>
+                                <h2 class="fw-bold mb-0">@ViewBag.ActiveJobs</h2>
+                            </div>
+                            <i class="fa-solid fa-briefcase fa-2x" style="color: var(--brand-pink);"></i>
+                        </div>
+                        <a asp-controller="JobOffer" asp-action="Index" class="stretched-link text-decoration-none small mt-3 d-block" style="color: var(--brand-red);">Browse all jobs &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+            {
+                <!-- 2. Admin Specific Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm h-100" style="border-left: 5px solid var(--brand-black) !important;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase text-muted small fw-bold">Pending Applications</h6>
+                                    <h2 class="fw-bold mb-0">@ViewBag.PendingApps</h2>
+                                </div>
+                                <i class="fa-solid fa-users-gear fa-2x" style="color: #ccc;"></i>
+                            </div>
+                            <a asp-controller="Admin" asp-action="Applications" class="stretched-link text-decoration-none small mt-3 d-block text-dark">Review Applications &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Admin Quick Action -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm h-100 bg-dark text-white">
+                        <div class="card-body text-center d-flex flex-column justify-content-center">
+                            <h5 class="fw-bold">Need to hire?</h5>
+                            <a asp-controller="JobOffer" asp-action="Create" class="btn btn-light fw-bold mt-2" style="color: var(--brand-red);">+ Post New Job</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- 2. Candidate Specific Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm h-100" style="border-left: 5px solid var(--brand-black) !important;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase text-muted small fw-bold">My Applications</h6>
+                                    <h2 class="fw-bold mb-0">@ViewBag.MyAppsCount</h2>
+                                </div>
+                                <i class="fa-solid fa-paper-plane fa-2x" style="color: #ccc;"></i>
+                            </div>
+                            <a asp-controller="Application" asp-action="MyApplications" class="stretched-link text-decoration-none small mt-3 d-block text-dark">View Status &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Candidate Success Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm h-100" style="border-left: 5px solid green !important;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase text-muted small fw-bold">Accepted</h6>
+                                    <h2 class="fw-bold mb-0 text-success">@ViewBag.MyAccepted</h2>
+                                </div>
+                                <i class="fa-solid fa-trophy fa-2x text-success" style="opacity: 0.5;"></i>
+                            </div>
+                            <small class="text-muted">Keep up the good work!</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    /* ==========================
+       🔴 GUEST LANDING PAGE
+       ========================== */
+    <div class="text-center py-5" style="background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-3" style="color: var(--brand-black);">
+                        Recruitment <span style="color: var(--brand-red);">Made Simple.</span>
+                    </h1>
+                    <p class="lead text-muted mb-5">
+                        Streamline your hiring process or find your next career move with the most intuitive HR platform.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-lg px-5 py-3 shadow-lg fw-bold"
+                           style="background-color: var(--brand-red); color: white; border-radius: 50px;">
+                            <i class="fa-solid fa-rocket me-2"></i> Get Started
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-dark btn-lg px-5 py-3 shadow fw-bold"
+                           style="border-radius: 50px;">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 pt-5 g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="mb-3">
+                            <i class="fa-solid fa-briefcase fa-3x" style="color: var(--brand-red);"></i>
+                        </div>
+                        <h4 class="fw-bold">Browse Jobs</h4>
+                        <p class="text-muted">Access a wide range of job opportunities tailored to your skills.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="mb-3">
+                            <i class="fa-solid fa-file-circle-check fa-3x" style="color: var(--brand-black);"></i>
+                        </div>
+                        <h4 class="fw-bold">Apply Easily</h4>
+                        <p class="text-muted">Upload your CV once and apply to multiple companies with a click.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="mb-3">
+                            <i class="fa-solid fa-chart-line fa-3x" style="color: var(--brand-dark-red);"></i>
+                        </div>
+                        <h4 class="fw-bold">Track Status</h4>
+                        <p class="text-muted">Stay informed with real-time updates on your application progress.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

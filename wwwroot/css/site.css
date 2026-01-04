@@ -1,0 +1,101 @@
+:root {
+    --brand-black: #000000;
+    --brand-dark-red: #531111;
+    --brand-red: #A52222;
+    --brand-pink: #D29191;
+    --brand-white: #FFFFFF;
+}
+
+body {
+    background-color: #f4f6f9; /* Light grey background for contrast */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* --- SIDEBAR STYLES --- */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: var(--brand-black);
+    color: var(--brand-white);
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+    #sidebar .sidebar-header {
+        padding: 20px;
+        background: var(--brand-dark-red);
+        text-align: center;
+    }
+
+    #sidebar ul.components {
+        padding: 20px 0;
+    }
+
+    #sidebar ul li a {
+        padding: 15px;
+        font-size: 1.1em;
+        display: block;
+        color: var(--brand-pink);
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        #sidebar ul li a:hover {
+            color: var(--brand-white);
+            background: var(--brand-red);
+            padding-left: 20px; /* Slide effect */
+        }
+
+    #sidebar ul li.active > a {
+        color: #fff;
+        background: var(--brand-red);
+    }
+
+/* --- CONTENT AREA --- */
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+/* --- BUTTONS --- */
+.btn-primary {
+    background-color: var(--brand-red);
+    border-color: var(--brand-red);
+}
+
+    .btn-primary:hover {
+        background-color: var(--brand-dark-red);
+        border-color: var(--brand-dark-red);
+    }
+
+.btn-outline-primary {
+    color: var(--brand-red);
+    border-color: var(--brand-red);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--brand-red);
+        color: white;
+    }
+
+/* --- CARDS --- */
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-top: 4px solid var(--brand-red);
+}
+
+/* --- BADGES --- */
+.badge-status {
+    background-color: var(--brand-pink);
+    color: var(--brand-dark-red);
+}

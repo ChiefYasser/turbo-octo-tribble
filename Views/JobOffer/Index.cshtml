@@ -1,0 +1,107 @@
+﻿@model IEnumerable<HRRecruitmentSystem.Models.JobOffer>
+
+@{
+    ViewData["Title"] = "Job Offers";
+}
+
+<div class="container-fluid pt-3">
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold" style="color: var(--brand-black);">
+                <i class="fa-solid fa-briefcase me-2" style="color: var(--brand-red);"></i> Open Positions
+            </h2>
+            <p class="text-muted">Find the perfect role for you.</p>
+        </div>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+        {
+            <a asp-action="Create" class="btn btn-primary shadow-sm" style="background-color: var(--brand-red); border: none;">
+                <i class="fa-solid fa-plus"></i> Post New Job
+            </a>
+        }
+    </div>
+
+    <!-- 🔍 SEARCH BAR -->
+    <form asp-controller="JobOffer" asp-action="Index" method="get" class="mb-5">
+        <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white border-0 ps-4">
+                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+            </span>
+            <input type="text" name="searchString" class="form-control border-0" placeholder="Search by job title, skill (e.g., 'Java'), or location..." />
+            <button class="btn btn-dark px-4" type="submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Job Cards List -->
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-light border shadow-sm d-inline-block px-5">
+                    <i class="fa-solid fa-folder-open fa-2x mb-3 text-muted"></i>
+                    <h5>No jobs found matching your search.</h5>
+                    <a asp-action="Index" class="btn btn-link text-danger">Clear Search</a>
+                </div>
+            </div>
+        }
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 hover-effect" style="transition: transform 0.2s;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title fw-bold text-dark mb-0">@item.Title</h5>
+                            @if (item.IsActive)
+                            {
+                                <span class="badge bg-success-subtle text-success border border-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary border">Closed</span>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="text-muted small mb-2">
+                                <i class="fa-solid fa-location-dot me-1 text-danger"></i> @item.Location
+                            </h6>
+                            <span class="badge p-2" style="background-color: var(--brand-pink); color: var(--brand-dark-red);">
+                                <i class="fa-solid fa-clock me-1"></i> @item.JobType
+                            </span>
+                        </div>
+
+                        <p class="card-text text-muted text-truncate">@item.Description</p>
+
+                        <hr class="my-3 opacity-25" />
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Read More</a>
+
+                            <!-- Apply Button -->
+                            <a asp-controller="Application" asp-action="Apply" asp-route-id="@item.Id" class="btn btn-primary btn-sm rounded-pill px-4" style="background-color: var(--brand-red); border: none;">
+                                Apply Now
+                            </a>
+                        </div>
+
+                        @* ✅ SECURITY: Admin/HR Controls *@
+                        @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                        {
+                            <div class="mt-3 pt-2 border-top text-end bg-light mx-n4 mb-n4 px-4 pb-2 rounded-bottom">
+                                <span class="text-muted small me-2">Admin:</span>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-primary small me-2 text-decoration-none fw-bold">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger small text-decoration-none fw-bold">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

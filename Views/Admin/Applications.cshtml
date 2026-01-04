@@ -1,0 +1,90 @@
+﻿@model IEnumerable<HRRecruitmentSystem.Models.Application>
+
+@{
+    ViewData["Title"] = "Manage Applications";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Applications: @ViewBag.JobTitle</h1>
+    <a asp-controller="JobOffer" asp-action="Index" class="btn btn-outline-primary">Back to Jobs</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Candidate</th>
+                    <th>Job Title</th>
+                    <th>Applied Date</th>
+                    <th>CV</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.Candidate.FirstName @item.Candidate.LastName</strong><br />
+                            <small class="text-muted">@item.Candidate.Email</small>
+                        </td>
+                        <td>@item.JobOffer.Title</td>
+                        <td>@item.AppliedAt.ToShortDateString()</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Candidate.ResumePath))
+                            {
+                                <a href="~/uploads/@item.Candidate.ResumePath" target="_blank" class="btn btn-sm btn-outline-dark">
+                                    📄 View PDF
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No CV</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Status == HRRecruitmentSystem.Models.ApplicationStatus.Pending)
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                            else if (item.Status == HRRecruitmentSystem.Models.ApplicationStatus.Accepted)
+                            {
+                                <span class="badge bg-success">Accepted</span>
+                            }
+                            else if (item.Status == HRRecruitmentSystem.Models.ApplicationStatus.Rejected)
+                            {
+                                <span class="badge bg-danger">Rejected</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info">@item.Status</span>
+                            }
+                        </td>
+                        <td>
+                            <!-- Form to change status -->
+                            <form asp-action="UpdateStatus" method="post" class="d-flex gap-2">
+                                <input type="hidden" name="id" value="@item.Id" />
+
+                                <button type="submit" name="status" value="Accepted" class="btn btn-sm btn-success" title="Accept">
+                                    ✓
+                                </button>
+                                <button type="submit" name="status" value="Rejected" class="btn btn-sm btn-danger" title="Reject">
+                                    ✕
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">No applications found yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

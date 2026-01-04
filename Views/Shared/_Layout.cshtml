@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HR System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        /* 🟢 LOGGED IN LAYOUT: Show Sidebar */
+        <div class="wrapper">
+            <!-- SIDEBAR -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3><i class="fa-solid fa-briefcase"></i> HR System</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index"><i class="fa-solid fa-house me-2"></i> Home</a>
+                    </li>
+                    <li>
+                        <a asp-controller="JobOffer" asp-action="Index"><i class="fa-solid fa-list me-2"></i> Job Offers</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Application" asp-action="MyApplications"><i class="fa-solid fa-user-check me-2"></i> My Applications</a>
+                    </li>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("HR"))
+                    {
+                        <hr class="bg-light" />
+                        <li class="px-3 text-uppercase small text-muted">Admin Panel</li>
+                        <li>
+                            <a asp-controller="Admin" asp-action="Dashboard"><i class="fa-solid fa-chart-pie me-2"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Admin" asp-action="Applications"><i class="fa-solid fa-users me-2"></i> All Applications</a>
+                        </li>
+                    }
+                </ul>
+
+                <div class="p-3">
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="btn btn-outline-light w-100">Logout</button>
+                    </form>
+                </div>
+            </nav>
+
+            <!-- MAIN CONTENT -->
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm rounded">
+                    <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        <span class="ms-3 fw-bold text-uppercase" style="color: var(--brand-red);">@ViewData["Title"]</span>
+                        <div class="ms-auto">
+                            <span class="me-2 text-muted">Welcome, <strong>@User.Identity.Name</strong></span>
+                        </div>
+                    </div>
+                </nav>
+
+                <main role="main">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    }
+    else
+    {
+        /* 🔴 GUEST LAYOUT: Top Navbar Only (Landing Page) */
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark mb-3 shadow-sm" style="background-color: var(--brand-black);">
+                <div class="container">
+                    <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index" style="color: var(--brand-red);">
+                        <i class="fa-solid fa-briefcase"></i> HRRecruitment
+                    </a>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary ms-2" asp-area="Identity" asp-page="/Account/Register" style="background-color: var(--brand-red); border:none;">Get Started</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

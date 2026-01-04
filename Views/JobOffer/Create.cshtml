@@ -1,0 +1,69 @@
+﻿@model HRRecruitmentSystem.Models.JobOffer
+
+@{
+    ViewData["Title"] = "Create Job Offer";
+}
+
+<h1>Create Job Offer</h1>
+
+<h4>Job Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label fw-bold"></label>
+                <input asp-for="Title" class="form-control" placeholder="e.g. Senior Java Developer" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label fw-bold"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Location" class="control-label fw-bold"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group mb-3">
+                <label asp-for="JobType" class="control-label fw-bold"></label>
+                <select asp-for="JobType" class="form-control" asp-items="Html.GetEnumSelectList<HRRecruitmentSystem.Models.JobType>()">
+                    <option value="">-- Select Job Type --</option>
+                </select>
+                <span asp-validation-for="JobType" class="text-danger"></span>
+            </div>
+
+          
+
+            <div class="form-group mb-3">
+                <label asp-for="Deadline" class="control-label fw-bold"></label>
+                <input asp-for="Deadline" class="form-control" type="date" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Offer" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
